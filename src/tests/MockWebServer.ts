@@ -1,8 +1,7 @@
-import { DefaultBodyType, http, HttpResponse} from "msw";
+import { DefaultBodyType, http, HttpResponse } from "msw";
 import { SetupServer, setupServer } from "msw/node";
 
 export type Method = "get" | "post" | "put";
-
 
 export interface MockHandler<T extends DefaultBodyType> {
     method: Method;
@@ -62,15 +61,15 @@ export class MockWebServer {
         switch (handler.method) {
             case "get":
                 return http.get(handler.endpoint, () => {
-                    return HttpResponse.json(handler.response, { status:handler.httpStatusCode})    
+                    return HttpResponse.json(handler.response, { status: handler.httpStatusCode });
                 });
             case "post":
                 return http.post(handler.endpoint, () => {
-                    return HttpResponse.json(handler.response, { status:handler.httpStatusCode})    
+                    return HttpResponse.json(handler.response, { status: handler.httpStatusCode });
                 });
             case "put":
                 return http.put(handler.endpoint, () => {
-                    return HttpResponse.json(handler.response, { status:handler.httpStatusCode})    
+                    return HttpResponse.json(handler.response, { status: handler.httpStatusCode });
                 });
         }
     }

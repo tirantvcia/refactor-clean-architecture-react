@@ -1,4 +1,4 @@
-import { waitFor, within, screen } from "@testing-library/dom"
+import { waitFor, within, screen } from "@testing-library/dom";
 import { expect } from "vitest";
 import { RemoteProduct } from "../../../api/StoreApi";
 
@@ -11,7 +11,6 @@ export function verifyHeader(headerRow: HTMLElement) {
     within(cells[2]).getByText("Image");
     within(cells[3]).getByText("Price");
     within(cells[4]).getByText("Status");
-
 }
 
 export function verifyRows(rows: HTMLElement[], products: RemoteProduct[]) {
@@ -26,11 +25,12 @@ export function verifyRows(rows: HTMLElement[], products: RemoteProduct[]) {
         const image: HTMLImageElement = within(cells[2]).getByRole("img");
         expect(image.src).toBe(product.image);
         within(cells[3]).getByText(`$${product.price.toFixed(2)}`);
-        within(cells[4]).getByText((product.price === 0)?"inactive":"active");
-        
-    })
+        within(cells[4]).getByText(product.price === 0 ? "inactive" : "active");
+    });
 }
 
 export async function waitTableIsLoaded() {
-   await waitFor(async () => { expect((await screen.findAllByRole("row")).length).toBeGreaterThan(1);});
+    await waitFor(async () => {
+        expect((await screen.findAllByRole("row")).length).toBeGreaterThan(1);
+    });
 }
