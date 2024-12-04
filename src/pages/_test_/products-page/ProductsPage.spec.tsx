@@ -5,7 +5,8 @@ import { AppProvider } from "../../../context/AppProvider";
 import { ProductsPage } from "../../ProductsPage";
 import { MockWebServer } from "../../../tests/MockWebServer";
 import { givenAProducts, givenThereAreNoProducts } from "./ProductsPage.fixture";
-import { verifyHeader, verifyRows, waitTableIsLoaded } from "./ProductsPage.helpers";
+import { openDialogToEditPrice, verifyDialog, verifyHeader, verifyRows, waitTableIsLoaded } from "./ProductsPage.helpers";
+import { RemoteProduct } from "../../../api/StoreApi";
 
 const mockWebServer = new MockWebServer();
 
@@ -18,25 +19,43 @@ describe("Products page", () => {
         renderComponent(<ProductsPage />);
         await screen.findAllByRole("heading", { name: "Product price updater" });
     });
-    test("should show an empty table if there are no data", async () => {
-        givenThereAreNoProducts(mockWebServer);
-        renderComponent(<ProductsPage />);
-        const rows = await screen.findAllByRole("row");
-        expect(rows.length).toBe(1);
-        verifyHeader(rows[0]);
-    });
-    test("should show expected rows in the table", async () => {
-        const products = givenAProducts(mockWebServer);
-        renderComponent(<ProductsPage />);
-        await waitTableIsLoaded();
-        const allRows = await screen.findAllByRole("row");
-        const [header, ...rows] = allRows;
 
-        verifyHeader(header);
-        verifyRows(rows, products);
+    describe("Table", ()=> {
+        test("should show an empty table if there are no data", async () => {
+            givenThereAreNoProducts(mockWebServer);
+            renderComponent(<ProductsPage />);
+            const rows = await screen.findAllByRole("row");
+            expect(rows.length).toBe(1);
+            verifyHeader(rows[0]);
+        });
+        test("should show expected rows in the table", async () => {
+            const products = givenAProducts(mockWebServer);
+            renderComponent(<ProductsPage />);
+            await waitTableIsLoaded();
+            const allRows = await screen.findAllByRole("row");
+            const [header, ...rows] = allRows;
+    
+            verifyHeader(header);
+            verifyRows(rows, products);
+        });
     });
+
+    describe("Edit price", ()=> {
+        test("should show a dialog with the product", async () => {
+            const products = givenAProducts(mockWebServer);
+            renderComponent(<ProductsPage />);
+            await waitTableIsLoaded();
+
+            const dialog = await openDialogToEditPrice(0);
+            verifyDialog(dialog, products[0]);
+        })
+    })
+
 });
+
 
 function renderComponent(component: ReactNode): RenderResult {
     return render(<AppProvider>{component}</AppProvider>);
 }
+
+
