@@ -38,13 +38,13 @@ export async function waitTableIsLoaded() {
 
 export async function openDialogToEditPrice(index: number): Promise<HTMLElement> {
     const allRows = await screen.findAllByRole("row");
-    const [, ...rows]  = allRows;
+    const [, ...rows] = allRows;
     const row = rows[index];
 
     const rowScope = within(row);
     await userEvent.click(rowScope.getByRole("menuitem"));
 
-    const updatePriceMenu = await screen.findByRole("menuitem", {name: /update price/i});
+    const updatePriceMenu = await screen.findByRole("menuitem", { name: /update price/i });
     await userEvent.click(updatePriceMenu);
     return await screen.findByRole("dialog");
 }

@@ -5,7 +5,13 @@ import { AppProvider } from "../../../context/AppProvider";
 import { ProductsPage } from "../../ProductsPage";
 import { MockWebServer } from "../../../tests/MockWebServer";
 import { givenAProducts, givenThereAreNoProducts } from "./ProductsPage.fixture";
-import { openDialogToEditPrice, verifyDialog, verifyHeader, verifyRows, waitTableIsLoaded } from "./ProductsPage.helpers";
+import {
+    openDialogToEditPrice,
+    verifyDialog,
+    verifyHeader,
+    verifyRows,
+    waitTableIsLoaded,
+} from "./ProductsPage.helpers";
 import { RemoteProduct } from "../../../api/StoreApi";
 
 const mockWebServer = new MockWebServer();
@@ -20,7 +26,7 @@ describe("Products page", () => {
         await screen.findAllByRole("heading", { name: "Product price updater" });
     });
 
-    describe("Table", ()=> {
+    describe("Table", () => {
         test("should show an empty table if there are no data", async () => {
             givenThereAreNoProducts(mockWebServer);
             renderComponent(<ProductsPage />);
@@ -34,13 +40,13 @@ describe("Products page", () => {
             await waitTableIsLoaded();
             const allRows = await screen.findAllByRole("row");
             const [header, ...rows] = allRows;
-    
+
             verifyHeader(header);
             verifyRows(rows, products);
         });
     });
 
-    describe("Edit price", ()=> {
+    describe("Edit price", () => {
         test("should show a dialog with the product", async () => {
             const products = givenAProducts(mockWebServer);
             renderComponent(<ProductsPage />);
@@ -48,14 +54,10 @@ describe("Products page", () => {
 
             const dialog = await openDialogToEditPrice(0);
             verifyDialog(dialog, products[0]);
-        })
-    })
-
+        });
+    });
 });
-
 
 function renderComponent(component: ReactNode): RenderResult {
     return render(<AppProvider>{component}</AppProvider>);
 }
-
-
