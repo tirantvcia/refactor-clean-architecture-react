@@ -59,11 +59,10 @@ export function verifyDialog(dialog: HTMLElement, product: RemoteProduct) {
 
 export async function typePrice(dialog: HTMLElement, price: string) {
     const dialogScope = within(dialog);
-    const priceTextBox = dialogScope.getByRole("textbox", {name : "Price"})
+    const priceTextBox = dialogScope.getByRole("textbox", { name: "Price" });
     await userEvent.clear(priceTextBox);
     await userEvent.type(priceTextBox, price);
 }
-
 
 export async function verifyError(dialog: HTMLElement, error: string) {
     const dialogScope = within(dialog);
@@ -71,9 +70,8 @@ export async function verifyError(dialog: HTMLElement, error: string) {
 }
 export async function savePrice(dialog: HTMLElement) {
     const dialogScope = within(dialog);
-    const saveButton = dialogScope.getByRole("button", {name : /Save/i})
+    const saveButton = dialogScope.getByRole("button", { name: /Save/i });
     await userEvent.click(saveButton);
-  
 }
 export async function verifyPriceAndStatusInRow(index: number, newPrice: string, status: string) {
     const allRows = await screen.findAllByRole("row");
@@ -86,4 +84,3 @@ export async function verifyPriceAndStatusInRow(index: number, newPrice: string,
     within(cells[3]).getByText(`$${newPrice}`);
     within(cells[4]).getByText(status);
 }
-

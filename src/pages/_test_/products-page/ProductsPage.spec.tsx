@@ -76,7 +76,7 @@ describe("Products page", () => {
             const dialog = await openDialogToEditPrice(0);
             await typePrice(dialog, "nonnumeric");
             await verifyError(dialog, "Only numbers are allowed");
-        });    
+        });
         test("should show an error for prices greater than maximum", async () => {
             givenAProducts(mockWebServer);
             renderComponent(<ProductsPage />);
@@ -85,7 +85,7 @@ describe("Products page", () => {
             const dialog = await openDialogToEditPrice(0);
             await typePrice(dialog, "10000");
             await verifyError(dialog, "The max possible price is 999.99");
-        });   
+        });
         test("should edit price correctly and mark status as active for a price greater than 0", async () => {
             givenAProducts(mockWebServer);
             renderComponent(<ProductsPage />);
@@ -96,7 +96,7 @@ describe("Products page", () => {
             await typePrice(dialog, newPrice);
             await savePrice(dialog);
             await verifyPriceAndStatusInRow(0, newPrice, "active");
-        });   
+        });
         test("should edit price correctly and mark status as inactive for a price equals 0", async () => {
             givenAProducts(mockWebServer);
             renderComponent(<ProductsPage />);
@@ -107,14 +107,10 @@ describe("Products page", () => {
             await typePrice(dialog, newPrice);
             await savePrice(dialog);
             await verifyPriceAndStatusInRow(0, newPrice, "inactive");
-        });            
+        });
     });
 });
 
 function renderComponent(component: ReactNode): RenderResult {
     return render(<AppProvider>{component}</AppProvider>);
 }
-
-
-
-
