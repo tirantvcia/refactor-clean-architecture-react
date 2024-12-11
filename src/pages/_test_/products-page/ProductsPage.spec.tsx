@@ -16,7 +16,7 @@ import {
     verifyRows,
     waitTableIsLoaded,
 } from "./ProductsPage.helpers";
-import { RemoteProduct } from "../../../api/StoreApi";
+
 
 const mockWebServer = new MockWebServer();
 
