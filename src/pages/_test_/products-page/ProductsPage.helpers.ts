@@ -2,7 +2,7 @@ import { waitFor, within, screen } from "@testing-library/dom";
 import { expect } from "vitest";
 import { RemoteProduct } from "../../../api/StoreApi";
 import userEvent from "@testing-library/user-event";
-import { MenuItem } from "@mui/material";
+
 
 export function verifyHeader(headerRow: HTMLElement) {
     const headerScope = within(headerRow);
@@ -78,10 +78,10 @@ export async function verifyPriceAndStatusInRow(index: number, newPrice: string,
     within(cells[4]).getByText(status);
 }
 export async function changeToNonAdminUser() {
-    const adminUserButton =  screen.getByRole("button", {name: /User: admin user/i});
+    const adminUserButton = screen.getByRole("button", { name: /User: admin user/i });
     await userEvent.click(adminUserButton);
 
-    const menuItemNonAdminUserSelect =  screen.getByRole("menuitem", {name: /non admin user/i});
+    const menuItemNonAdminUserSelect = screen.getByRole("menuitem", { name: /non admin user/i });
     await userEvent.click(menuItemNonAdminUserSelect);
 }
 
@@ -96,4 +96,3 @@ export async function tryOpenDialogToEditPrice(index: number) {
     const updatePriceMenu = await screen.findByRole("menuitem", { name: /update price/i });
     await userEvent.click(updatePriceMenu);
 }
-

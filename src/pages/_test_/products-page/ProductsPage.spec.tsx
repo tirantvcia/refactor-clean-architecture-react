@@ -116,7 +116,6 @@ describe("Products page", () => {
             await changeToNonAdminUser();
             await tryOpenDialogToEditPrice(0);
             await screen.findByText("Only admin users can edit the price of a product");
-
         });
     });
 });
@@ -124,4 +123,3 @@ describe("Products page", () => {
 function renderComponent(component: ReactNode): RenderResult {
     return render(<AppProvider>{component}</AppProvider>);
 }
-
