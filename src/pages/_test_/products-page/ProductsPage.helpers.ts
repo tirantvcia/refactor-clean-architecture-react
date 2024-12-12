@@ -3,7 +3,6 @@ import { expect } from "vitest";
 import { RemoteProduct } from "../../../api/StoreApi";
 import userEvent from "@testing-library/user-event";
 
-
 export function verifyHeader(headerRow: HTMLElement) {
     const headerScope = within(headerRow);
     const cells = headerScope.getAllByRole("columnheader");
