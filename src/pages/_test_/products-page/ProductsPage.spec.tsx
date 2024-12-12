@@ -6,8 +6,10 @@ import { ProductsPage } from "../../ProductsPage";
 import { MockWebServer } from "../../../tests/MockWebServer";
 import { givenAProducts, givenThereAreNoProducts } from "./ProductsPage.fixture";
 import {
+    changeToNonAdminUser,
     openDialogToEditPrice,
     savePrice,
+    tryOpenDialogToEditPrice,
     typePrice,
     verifyDialog,
     verifyError,
@@ -16,7 +18,6 @@ import {
     verifyRows,
     waitTableIsLoaded,
 } from "./ProductsPage.helpers";
-
 
 const mockWebServer = new MockWebServer();
 
@@ -108,9 +109,19 @@ describe("Products page", () => {
             await savePrice(dialog);
             await verifyPriceAndStatusInRow(0, newPrice, "inactive");
         });
+        test("should show an error if the user is not admin", async () => {
+            givenAProducts(mockWebServer);
+            renderComponent(<ProductsPage />);
+            await waitTableIsLoaded();
+            await changeToNonAdminUser();
+            await tryOpenDialogToEditPrice(0);
+            await screen.findByText("Only admin users can edit the price of a product");
+
+        });
     });
 });
 
 function renderComponent(component: ReactNode): RenderResult {
     return render(<AppProvider>{component}</AppProvider>);
 }
+

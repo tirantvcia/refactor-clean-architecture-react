@@ -2,6 +2,7 @@ import { waitFor, within, screen } from "@testing-library/dom";
 import { expect } from "vitest";
 import { RemoteProduct } from "../../../api/StoreApi";
 import userEvent from "@testing-library/user-event";
+import { MenuItem } from "@mui/material";
 
 export function verifyHeader(headerRow: HTMLElement) {
     const headerScope = within(headerRow);
@@ -37,15 +38,7 @@ export async function waitTableIsLoaded() {
 }
 
 export async function openDialogToEditPrice(index: number): Promise<HTMLElement> {
-    const allRows = await screen.findAllByRole("row");
-    const [, ...rows] = allRows;
-    const row = rows[index];
-
-    const rowScope = within(row);
-    await userEvent.click(rowScope.getByRole("menuitem"));
-
-    const updatePriceMenu = await screen.findByRole("menuitem", { name: /update price/i });
-    await userEvent.click(updatePriceMenu);
+    await tryOpenDialogToEditPrice(index);
     return await screen.findByRole("dialog");
 }
 
@@ -84,3 +77,23 @@ export async function verifyPriceAndStatusInRow(index: number, newPrice: string,
     within(cells[3]).getByText(`$${newPrice}`);
     within(cells[4]).getByText(status);
 }
+export async function changeToNonAdminUser() {
+    const adminUserButton =  screen.getByRole("button", {name: /User: admin user/i});
+    await userEvent.click(adminUserButton);
+
+    const menuItemNonAdminUserSelect =  screen.getByRole("menuitem", {name: /non admin user/i});
+    await userEvent.click(menuItemNonAdminUserSelect);
+}
+
+export async function tryOpenDialogToEditPrice(index: number) {
+    const allRows = await screen.findAllByRole("row");
+    const [, ...rows] = allRows;
+    const row = rows[index];
+
+    const rowScope = within(row);
+    await userEvent.click(rowScope.getByRole("menuitem"));
+
+    const updatePriceMenu = await screen.findByRole("menuitem", { name: /update price/i });
+    await userEvent.click(updatePriceMenu);
+}
+
