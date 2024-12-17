@@ -95,3 +95,8 @@ export async function tryOpenDialogToEditPrice(index: number) {
     const updatePriceMenu = await screen.findByRole("menuitem", { name: /update price/i });
     await userEvent.click(updatePriceMenu);
 }
+export async function verifySaveButtonIsDisabled(dialog: HTMLElement) {
+    const dialogScope = within(dialog);
+    const saveButton = dialogScope.getByRole("button", { name: /Save/i });
+    expect(saveButton.closest("button")).toBeDisabled();
+}
