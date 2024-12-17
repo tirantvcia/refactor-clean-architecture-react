@@ -32,6 +32,7 @@ export const ProductsPage: React.FC = () => {
     const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
     const [priceError, setPriceError] = useState<string | undefined>(undefined);
 
+    // FIXME: Load products
     useEffect(() => {
         storeApi.getAll().then(response => {
             console.debug("Reloading", reloadKey);
@@ -44,6 +45,8 @@ export const ProductsPage: React.FC = () => {
         });
     }, [reloadKey]);
 
+    // FIXME: Load product
+    // FIXME: User validation
     const updatingQuantity = useCallback(
         async (id: number) => {
             if (id) {
@@ -66,10 +69,12 @@ export const ProductsPage: React.FC = () => {
         [currentUser]
     );
 
+    // FIXME: Close dialog
     const cancelEditPrice = useCallback(() => {
         setEditingProduct(undefined);
     }, []);
 
+    // FIXME: Price Validation
     function handleChangePrice(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
         if (!editingProduct) return;
 
@@ -89,6 +94,7 @@ export const ProductsPage: React.FC = () => {
         }
     }
 
+    // FIXME: Save price
     async function saveEditPrice(): Promise<void> {
         if (editingProduct) {
             const remoteProduct = await storeApi.get(editingProduct.id);
@@ -118,6 +124,7 @@ export const ProductsPage: React.FC = () => {
         }
     }
 
+    // FIXME: Define colums
     const columns: GridColDef<Product>[] = useMemo(
         () => [
             { ...baseColumn, field: "id", headerName: "ID", width: 70 },
@@ -183,6 +190,7 @@ export const ProductsPage: React.FC = () => {
         [updatingQuantity]
     );
 
+    // FIXME: Render page content
     return (
         <Stack direction="column" sx={{ minHeight: "100vh", overflow: "scroll" }}>
             <MainAppBar />
@@ -285,6 +293,7 @@ const StatusContainer = styled.div<{ status: ProductStatus }>`
     width: 100px;
 `;
 
+// FIXME: Product maping
 function buildProduct(remoteProduct: RemoteProduct): Product {
     return {
         id: remoteProduct.id,
