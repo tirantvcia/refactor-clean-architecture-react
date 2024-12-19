@@ -1,6 +1,6 @@
 import { waitFor, within, screen } from "@testing-library/dom";
 import { expect } from "vitest";
-import { RemoteProduct } from "../../../api/StoreApi";
+import { RemoteProduct } from "../../../../data/api/StoreApi";
 import userEvent from "@testing-library/user-event";
 
 export function verifyHeader(headerRow: HTMLElement) {
