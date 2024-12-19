@@ -12,7 +12,9 @@ import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { useAppContext } from "../context/useAppContext";
 import { ConfirmationDialog } from "../components/ConfirmationDialog";
 import { StoreApi } from "../../data/api/StoreApi";
-import { buildProduct, Product, useProducts } from "./useProducts";
+import { useProducts } from "./useProducts";
+import { buildProduct, GetProductsUseCase } from "../../domain/GetProductsUseCase";
+import { Product } from "../../domain/Product";
 
 const baseColumn: Partial<GridColDef<Product>> = {
     disableColumnMenu: true,
@@ -20,6 +22,10 @@ const baseColumn: Partial<GridColDef<Product>> = {
 };
 
 const storeApi = new StoreApi();
+
+function createBetProductsUseCase(): GetProductsUseCase {
+    return new GetProductsUseCase(storeApi);
+}
 
 export const ProductsPage: React.FC = () => {
     const { currentUser } = useAppContext();
@@ -29,10 +35,12 @@ export const ProductsPage: React.FC = () => {
     const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
     const [priceError, setPriceError] = useState<string | undefined>(undefined);
 
-    const {products, reload} = useProducts(storeApi);
-
-    // FIXME: Load products
    
+    const getProductsUseCase = useMemo(()=>createBetProductsUseCase(), []);
+    const {products, reload} = useProducts(getProductsUseCase);
+
+    
+    
 
     // FIXME: Load product
     // FIXME: User validation
