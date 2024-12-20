@@ -2,15 +2,13 @@ import { Product } from "../../domain/Product";
 import { ProductRepository } from "../../domain/ProductRepository";
 import { RemoteProduct, StoreApi } from "./StoreApi";
 
-export class ProductApiRepository implements ProductRepository{
+export class ProductApiRepository implements ProductRepository {
     constructor(readonly storeApi: StoreApi) {}
     async getAll(): Promise<Product[]> {
-         const remoteProducts = await this.storeApi.getAll();
+        const remoteProducts = await this.storeApi.getAll();
         return remoteProducts.map(buildProduct);
     }
-    
 }
-
 
 export function buildProduct(remoteProduct: RemoteProduct): Product {
     return {

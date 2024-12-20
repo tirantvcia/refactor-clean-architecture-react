@@ -25,7 +25,7 @@ const baseColumn: Partial<GridColDef<Product>> = {
 const storeApi = new StoreApi();
 
 function createBetProductsUseCase(): GetProductsUseCase {
-    const productRepository = new ProductApiRepository(storeApi)
+    const productRepository = new ProductApiRepository(storeApi);
     return new GetProductsUseCase(productRepository);
 }
 
@@ -37,12 +37,8 @@ export const ProductsPage: React.FC = () => {
     const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
     const [priceError, setPriceError] = useState<string | undefined>(undefined);
 
-   
-    const getProductsUseCase = useMemo(()=>createBetProductsUseCase(), []);
-    const {products, reload} = useProducts(getProductsUseCase);
-
-    
-    
+    const getProductsUseCase = useMemo(() => createBetProductsUseCase(), []);
+    const { products, reload } = useProducts(getProductsUseCase);
 
     // FIXME: Load product
     // FIXME: User validation
@@ -274,8 +270,6 @@ const ProductImage = styled.img`
 
 type ProductStatus = "active" | "inactive";
 
-
-
 const StatusContainer = styled.div<{ status: ProductStatus }>`
     background: ${props => (props.status === "inactive" ? "red" : "green")};
     display: flex;
@@ -286,6 +280,5 @@ const StatusContainer = styled.div<{ status: ProductStatus }>`
     border-radius: 20px;
     width: 100px;
 `;
-
 
 const priceRegex = /^\d+(\.\d{1,2})?$/;
