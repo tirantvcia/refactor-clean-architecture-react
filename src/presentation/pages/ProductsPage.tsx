@@ -15,6 +15,7 @@ import { StoreApi } from "../../data/api/StoreApi";
 import { useProducts } from "./useProducts";
 import { buildProduct, GetProductsUseCase } from "../../domain/GetProductsUseCase";
 import { Product } from "../../domain/Product";
+import { ProductApiRepository } from "../../data/api/ProductApiRepository";
 
 const baseColumn: Partial<GridColDef<Product>> = {
     disableColumnMenu: true,
@@ -24,7 +25,8 @@ const baseColumn: Partial<GridColDef<Product>> = {
 const storeApi = new StoreApi();
 
 function createBetProductsUseCase(): GetProductsUseCase {
-    return new GetProductsUseCase(storeApi);
+    const productRepository = new ProductApiRepository(storeApi)
+    return new GetProductsUseCase(productRepository);
 }
 
 export const ProductsPage: React.FC = () => {
