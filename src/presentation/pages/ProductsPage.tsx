@@ -28,32 +28,38 @@ function createGetProductsUseCase(): GetProductsUseCase {
     const productRepository = new ProductApiRepository(storeApi);
     return new GetProductsUseCase(productRepository);
 }
-function createGetProductByIdUseCase():GetProductByIdUseCase {
+function createGetProductByIdUseCase(): GetProductByIdUseCase {
     return new GetProductByIdUseCase(storeApi);
 }
 
 export const ProductsPage: React.FC = () => {
-  
     /**
      * @deprecated use error returned in useProducts instead of snackBarError
      */
     const [snackBarError, setSnackBarError] = useState<string>();
     const [snackBarSuccess, setSnackBarSuccess] = useState<string>();
 
-    
     const [priceError, setPriceError] = useState<string | undefined>(undefined);
 
     const getProductsUseCase = useMemo(() => createGetProductsUseCase(), []);
     const getProductByIdUseCase = useMemo(() => createGetProductByIdUseCase(), []);
-    const { products, reload, updatingQuantity, editingProduct, setEditingProduct, error, cancelEditPrice } = useProducts(getProductsUseCase, getProductByIdUseCase);
+    const {
+        products,
+        reload,
+        updatingQuantity,
+        editingProduct,
+        setEditingProduct,
+        error,
+        cancelEditPrice,
+    } = useProducts(getProductsUseCase, getProductByIdUseCase);
 
-    useEffect(()=>setSnackBarError(error), [error])
+    useEffect(() => setSnackBarError(error), [error]);
 
     // FIXME: Load product
     // FIXME: User validation
-    
+
     // FIXME: Close dialog
-  
+
     // FIXME: Price Validation
     function handleChangePrice(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
         if (!editingProduct) return;

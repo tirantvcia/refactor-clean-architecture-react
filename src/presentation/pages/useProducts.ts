@@ -5,7 +5,10 @@ import { Product } from "../../domain/Product";
 import { useAppContext } from "../context/useAppContext";
 import { GetProductByIdUseCase, ResourceNotFound } from "../../domain/GetProductByIdUseCase";
 
-export function useProducts(getProductsUseCase: GetProductsUseCase, getProductByIdUseCase : GetProductByIdUseCase) {
+export function useProducts(
+    getProductsUseCase: GetProductsUseCase,
+    getProductByIdUseCase: GetProductByIdUseCase
+) {
     const { currentUser } = useAppContext();
     const [reloadKey, reload] = useReload();
     const [products, setProducts] = useState<Product[]>([]);
@@ -33,24 +36,25 @@ export function useProducts(getProductsUseCase: GetProductsUseCase, getProductBy
                 try {
                     const product = await getProductByIdUseCase.execute(id);
                     setEditingProduct(product);
-                } catch(error) {
-                    if(error instanceof ResourceNotFound) {
+                } catch (error) {
+                    if (error instanceof ResourceNotFound) {
                         setError(error.message);
                     } else {
                         setError("Unexpected error has ocurred");
                     }
-
                 }
-                
-                               
             }
         },
         [currentUser.isAdmin, getProductByIdUseCase]
     );
 
-    return { products, reload , updatingQuantity, editingProduct, setEditingProduct, error, cancelEditPrice};
+    return {
+        products,
+        reload,
+        updatingQuantity,
+        editingProduct,
+        setEditingProduct,
+        error,
+        cancelEditPrice,
+    };
 }
-
-
-
-
