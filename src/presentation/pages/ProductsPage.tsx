@@ -15,6 +15,7 @@ import { useProducts } from "./useProducts";
 import { GetProductsUseCase } from "../../domain/GetProductsUseCase";
 import { Product } from "../../domain/Product";
 import { ProductApiRepository } from "../../data/api/ProductApiRepository";
+import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 
 const baseColumn: Partial<GridColDef<Product>> = {
     disableColumnMenu: true,
@@ -23,9 +24,12 @@ const baseColumn: Partial<GridColDef<Product>> = {
 
 const storeApi = new StoreApi();
 
-function createBetProductsUseCase(): GetProductsUseCase {
+function createGetProductsUseCase(): GetProductsUseCase {
     const productRepository = new ProductApiRepository(storeApi);
     return new GetProductsUseCase(productRepository);
+}
+function createGetProductByIdUseCase():GetProductByIdUseCase {
+    return new GetProductByIdUseCase(storeApi);
 }
 
 export const ProductsPage: React.FC = () => {
@@ -39,15 +43,15 @@ export const ProductsPage: React.FC = () => {
     
     const [priceError, setPriceError] = useState<string | undefined>(undefined);
 
-    const getProductsUseCase = useMemo(() => createBetProductsUseCase(), []);
-    const { products, reload, updatingQuantity, editingProduct, setEditingProduct, error, cancelEditPrice } = useProducts(getProductsUseCase, storeApi);
+    const getProductsUseCase = useMemo(() => createGetProductsUseCase(), []);
+    const getProductByIdUseCase = useMemo(() => createGetProductByIdUseCase(), []);
+    const { products, reload, updatingQuantity, editingProduct, setEditingProduct, error, cancelEditPrice } = useProducts(getProductsUseCase, getProductByIdUseCase);
 
     useEffect(()=>setSnackBarError(error), [error])
 
     // FIXME: Load product
     // FIXME: User validation
     
-
     // FIXME: Close dialog
   
     // FIXME: Price Validation
