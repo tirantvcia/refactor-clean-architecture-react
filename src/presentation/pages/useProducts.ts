@@ -19,7 +19,7 @@ export function useProducts(
         getProductsUseCase.execute().then(products => {
             setProducts(products);
         });
-    }, [reloadKey]);
+    }, [reloadKey, getProductsUseCase]);
 
     const cancelEditPrice = useCallback(() => {
         setEditingProduct(undefined);
