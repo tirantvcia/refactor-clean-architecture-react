@@ -1,12 +1,24 @@
 import { Product } from "../../domain/Product";
-import { ProductRepository } from "../../domain/ProductRepository";
+import { ProductRepository, ResourceNotFound } from "../../domain/ProductRepository";
 import { RemoteProduct, StoreApi } from "./StoreApi";
+
 
 export class ProductApiRepository implements ProductRepository {
     constructor(readonly storeApi: StoreApi) {}
+
     async getAll(): Promise<Product[]> {
         const remoteProducts = await this.storeApi.getAll();
         return remoteProducts.map(buildProduct);
+    }
+
+    async getProductById(id: number): Promise<Product> {
+        try {
+            const remoteProduct = await this.storeApi.get(id);
+            return buildProduct(remoteProduct);
+        } catch (error) {
+            throw new ResourceNotFound(`Product with id ${id} not found`);
+        }
+       
     }
 }
 
