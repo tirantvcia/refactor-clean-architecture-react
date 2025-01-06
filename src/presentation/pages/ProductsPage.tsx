@@ -19,8 +19,6 @@ const baseColumn: Partial<GridColDef<Product>> = {
     sortable: false,
 };
 
-
-
 export const ProductsPage: React.FC = () => {
     /**
      * @deprecated use error returned in useProducts instead of snackBarError
@@ -30,8 +28,14 @@ export const ProductsPage: React.FC = () => {
 
     const [priceError, setPriceError] = useState<string | undefined>(undefined);
 
-    const getProductsUseCase = useMemo(() => CompositionRoot.getInstance().provideGetProductsUseCase(), []);
-    const getProductByIdUseCase = useMemo(() => CompositionRoot.getInstance().provideGetProductByIdUseCase(), []);
+    const getProductsUseCase = useMemo(
+        () => CompositionRoot.getInstance().provideGetProductsUseCase(),
+        []
+    );
+    const getProductByIdUseCase = useMemo(
+        () => CompositionRoot.getInstance().provideGetProductByIdUseCase(),
+        []
+    );
     const {
         products,
         reload,
@@ -73,7 +77,6 @@ export const ProductsPage: React.FC = () => {
     async function saveEditPrice(): Promise<void> {
         const storeApi = CompositionRoot.getInstance().provideStoreApi();
         if (editingProduct) {
-           
             const remoteProduct = await storeApi.get(editingProduct.id);
 
             if (!remoteProduct) return;

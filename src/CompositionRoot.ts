@@ -18,8 +18,6 @@ export class CompositionRoot {
         return CompositionRoot.instance;
     }
 
-    
-    
     provideGetProductsUseCase(): GetProductsUseCase {
         return new GetProductsUseCase(this.productRepository);
     }
@@ -27,8 +25,7 @@ export class CompositionRoot {
         return new GetProductByIdUseCase(this.productRepository);
     }
 
-    provideStoreApi():StoreApi {
+    provideStoreApi(): StoreApi {
         return this.storeApi;
     }
-    
 }

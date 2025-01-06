@@ -26,8 +26,6 @@ export function useProducts(
         setEditingProduct(undefined);
     }, [setEditingProduct]);
 
-
-
     const updatingQuantity = useCallback(
         async (id: number) => {
             if (id) {
