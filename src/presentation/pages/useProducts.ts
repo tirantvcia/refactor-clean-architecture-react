@@ -24,7 +24,9 @@ export function useProducts(
 
     const cancelEditPrice = useCallback(() => {
         setEditingProduct(undefined);
-    }, []);
+    }, [setEditingProduct]);
+
+
 
     const updatingQuantity = useCallback(
         async (id: number) => {
