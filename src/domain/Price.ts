@@ -14,7 +14,7 @@ export class Price extends ValueObject<PriceProps> {
     }
     public static create(value: string) {
         const isValidNumber = !isNaN(+value);
-        
+
         if (!isValidNumber) {
             throw new ValidationError("Only numbers are allowed");
         } else {
@@ -23,11 +23,10 @@ export class Price extends ValueObject<PriceProps> {
             } else if (+value > 999.99) {
                 throw new ValidationError("The max possible price is 999.99");
             } else {
-                return new Price({value: +value});
+                return new Price({ value: +value });
             }
         }
     }
-
 }
 
 export class ValidationError extends Error {}

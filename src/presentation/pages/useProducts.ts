@@ -28,8 +28,6 @@ export function useProducts(
         setEditingProduct(undefined);
     }, [setEditingProduct]);
 
-    
-     
     function onChangePrice(price: string): void {
         if (!editingProduct) return;
 
@@ -37,16 +35,14 @@ export function useProducts(
             setEditingProduct({ ...editingProduct, price: price });
             Price.create(price);
             setPriceError(undefined);
-        } catch(error) {
-            if(error instanceof ValidationError) {
+        } catch (error) {
+            if (error instanceof ValidationError) {
                 console.log("Erroror " + error.message);
             } else {
                 setPriceError("Unexpected error has ocurred");
             }
         }
-
     }
-
 
     const updatingQuantity = useCallback(
         async (id: number) => {
