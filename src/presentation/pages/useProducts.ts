@@ -5,6 +5,7 @@ import { Product } from "../../domain/Product";
 import { useAppContext } from "../context/useAppContext";
 import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 import { ResourceNotFound } from "../../domain/ProductRepository";
+import { Price, ValidationError } from "../../domain/Price";
 
 export function useProducts(
     getProductsUseCase: GetProductsUseCase,
@@ -27,26 +28,25 @@ export function useProducts(
         setEditingProduct(undefined);
     }, [setEditingProduct]);
 
-    const priceRegex = /^\d+(\.\d{1,2})?$/;
+    
      
     function onChangePrice(price: string): void {
         if (!editingProduct) return;
 
-        const isValidNumber = !isNaN(+price);
-        setEditingProduct({ ...editingProduct, price: price });
-
-        if (!isValidNumber) {
-            setPriceError("Only numbers are allowed");
-        } else {
-            if (!priceRegex.test(price)) {
-                setPriceError("Invalid price format");
-            } else if (+price > 999.99) {
-                setPriceError("The max possible price is 999.99");
+        try {
+            setEditingProduct({ ...editingProduct, price: price });
+            Price.create(price);
+            setPriceError(undefined);
+        } catch(error) {
+            if(error instanceof ValidationError) {
+                console.log("Erroror " + error.message);
             } else {
-                setPriceError(undefined);
+                setPriceError("Unexpected error has ocurred");
             }
         }
+
     }
+
 
     const updatingQuantity = useCallback(
         async (id: number) => {
