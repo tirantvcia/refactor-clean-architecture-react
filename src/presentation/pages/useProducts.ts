@@ -37,7 +37,7 @@ export function useProducts(
             setPriceError(undefined);
         } catch (error) {
             if (error instanceof ValidationError) {
-                console.log("Erroror " + error.message);
+                setPriceError(error.message);
             } else {
                 setPriceError("Unexpected error has ocurred");
             }
