@@ -251,4 +251,3 @@ const StatusContainer = styled.div<{ status: ProductStatus }>`
     width: 100px;
 `;
 
-const priceRegex = /^\d+(\.\d{1,2})?$/;
