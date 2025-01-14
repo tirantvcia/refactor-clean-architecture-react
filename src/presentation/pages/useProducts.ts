@@ -7,20 +7,26 @@ import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 import { ResourceNotFound } from "../../domain/ProductRepository";
 import { Price, ValidationError } from "../../domain/Price";
 
+
+
+export type ProductStatus = "active" | "inactive";
+export type ProductViewModel = Product & {status: ProductStatus};
+
 export function useProducts(
     getProductsUseCase: GetProductsUseCase,
     getProductByIdUseCase: GetProductByIdUseCase
 ) {
     const { currentUser } = useAppContext();
     const [reloadKey, reload] = useReload();
-    const [products, setProducts] = useState<Product[]>([]);
-    const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
+    const [products, setProducts] = useState<ProductViewModel[]>([]);
+    const [editingProduct, setEditingProduct] = useState<ProductViewModel | undefined>(undefined);
     const [error, setError] = useState<string>();
     const [priceError, setPriceError] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         getProductsUseCase.execute().then(products => {
-            setProducts(products);
+            const productsViewModel = products.map(product => buildProductViewModel(product));
+            setProducts(productsViewModel);
         });
     }, [reloadKey, getProductsUseCase]);
 
@@ -54,7 +60,7 @@ export function useProducts(
 
                 try {
                     const product = await getProductByIdUseCase.execute(id);
-                    setEditingProduct(product);
+                    setEditingProduct(buildProductViewModel(product));
                 } catch (error) {
                     if (error instanceof ResourceNotFound) {
                         setError(error.message);
@@ -78,4 +84,11 @@ export function useProducts(
         onChangePrice,
         priceError,
     };
+}
+
+function buildProductViewModel(product: Product): ProductViewModel {
+    return {
+        ...product,
+        status: +product.price === 0 ? "inactive" : "active"
+    }
 }

@@ -10,11 +10,11 @@ import { MainAppBar } from "../components/MainAppBar";
 import styled from "@emotion/styled";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { ConfirmationDialog } from "../components/ConfirmationDialog";
-import { useProducts } from "./useProducts";
-import { Product } from "../../domain/Product";
+import { ProductStatus, ProductViewModel, useProducts } from "./useProducts";
+//import { Product } from "../../domain/Product";
 import { CompositionRoot } from "../../CompositionRoot";
 
-const baseColumn: Partial<GridColDef<Product>> = {
+const baseColumn: Partial<GridColDef<ProductViewModel>> = {
     disableColumnMenu: true,
     sortable: false,
 };
@@ -90,7 +90,7 @@ export const ProductsPage: React.FC = () => {
     }
 
     // FIXME: Define colums
-    const columns: GridColDef<Product>[] = useMemo(
+    const columns: GridColDef<ProductViewModel>[] = useMemo(
         () => [
             { ...baseColumn, field: "id", headerName: "ID", width: 70 },
             { ...baseColumn, field: "title", headerName: "Title", width: 600 },
@@ -128,7 +128,7 @@ export const ProductsPage: React.FC = () => {
                 headerAlign: "center",
                 align: "center",
                 renderCell: params => {
-                    const status = +params.row.price === 0 ? "inactive" : "active";
+                    const status = params.row.status;
 
                     return (
                         <StatusContainer status={status}>
@@ -164,7 +164,7 @@ export const ProductsPage: React.FC = () => {
                 <Typography variant="h3" component="h1" gutterBottom>
                     {"Product price updater"}
                 </Typography>
-                <DataGrid<Product>
+                <DataGrid<ProductViewModel>
                     columnBuffer={10}
                     rowHeight={300}
                     rows={products}
@@ -238,7 +238,7 @@ const ProductImage = styled.img`
     object-fit: contain;
 `;
 
-type ProductStatus = "active" | "inactive";
+
 
 const StatusContainer = styled.div<{ status: ProductStatus }>`
     background: ${props => (props.status === "inactive" ? "red" : "green")};
