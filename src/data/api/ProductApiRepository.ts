@@ -21,7 +21,7 @@ export class ProductApiRepository implements ProductRepository {
 }
 
 export function buildProduct(remoteProduct: RemoteProduct): Product {
-    return {
+    return Product.create( {
         id: remoteProduct.id,
         title: remoteProduct.title,
         image: remoteProduct.image,
@@ -29,5 +29,5 @@ export function buildProduct(remoteProduct: RemoteProduct): Product {
             maximumFractionDigits: 2,
             minimumFractionDigits: 2,
         }),
-    };
+    });
 }
