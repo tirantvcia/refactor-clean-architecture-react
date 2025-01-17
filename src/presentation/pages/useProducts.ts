@@ -7,10 +7,7 @@ import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 import { ResourceNotFound } from "../../domain/ProductRepository";
 import { Price, ValidationError } from "../../domain/Price";
 
-
-
-
-export type ProductViewModel = ProductData & {status: ProductStatus};
+export type ProductViewModel = ProductData & { status: ProductStatus };
 
 export function useProducts(
     getProductsUseCase: GetProductsUseCase,
@@ -89,6 +86,6 @@ export function useProducts(
 function buildProductViewModel(product: Product): ProductViewModel {
     return {
         ...product,
-        price: ""+product.price.value.toFixed(2),
-    }
+        price: "" + product.price.value.toFixed(2),
+    };
 }

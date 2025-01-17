@@ -11,11 +11,11 @@ export interface ProductData {
 type ProductEntityData = Omit<ProductData, "price"> & {
     price: Price;
     status: ProductStatus;
-}
+};
 
 export type ProductStatus = "active" | "inactive";
 
-export class Product extends Entity{
+export class Product extends Entity {
     readonly id: number;
     readonly title: string;
     readonly image: string;
@@ -30,9 +30,9 @@ export class Product extends Entity{
         this.price = data.price;
         this.status = data.status;
     }
-    static create(  data: ProductData): Product {
+    static create(data: ProductData): Product {
         const price = Price.create(data.price);
         const status = price.value === 0 ? "inactive" : "active";
-        return new Product({...data, price, status});
+        return new Product({ ...data, price, status });
     }
 }

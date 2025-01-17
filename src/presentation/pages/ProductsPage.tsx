@@ -237,8 +237,6 @@ const ProductImage = styled.img`
     object-fit: contain;
 `;
 
-
-
 const StatusContainer = styled.div<{ status: ProductStatus }>`
     background: ${props => (props.status === "inactive" ? "red" : "green")};
     display: flex;
