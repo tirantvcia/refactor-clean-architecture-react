@@ -20,7 +20,6 @@ const baseColumn: Partial<GridColDef<ProductViewModel>> = {
 };
 
 export const ProductsPage: React.FC = () => {
-
     const getProductsUseCase = useMemo(
         () => CompositionRoot.getInstance().provideGetProductsUseCase(),
         []
@@ -30,12 +29,10 @@ export const ProductsPage: React.FC = () => {
         []
     );
 
-   const updateProductPriceUseCase = useMemo(
+    const updateProductPriceUseCase = useMemo(
         () => CompositionRoot.getInstance().provideUpdateProductPriceUseCase(),
         []
     );
-
-    
 
     const {
         products,
@@ -46,10 +43,8 @@ export const ProductsPage: React.FC = () => {
         onChangePrice,
         priceError,
         saveEditPrice,
-        onCloseMessage
+        onCloseMessage,
     } = useProducts(getProductsUseCase, getProductByIdUseCase, updateProductPriceUseCase);
-
-    
 
     // FIXME: Load product
     // FIXME: User validation
@@ -62,7 +57,6 @@ export const ProductsPage: React.FC = () => {
     }
 
     // FIXME: Save price
-    
 
     // FIXME: Define colums
     const columns: GridColDef<ProductViewModel>[] = useMemo(

@@ -6,16 +6,18 @@ import { useAppContext } from "../context/useAppContext";
 import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 import { ResourceNotFound } from "../../domain/ProductRepository";
 import { Price, ValidationError } from "../../domain/Price";
-import { ActionNotAllowedError, UpdateProductPriceUseCase } from "../../domain/UpdateProductPriceUseCase";
+import {
+    ActionNotAllowedError,
+    UpdateProductPriceUseCase,
+} from "../../domain/UpdateProductPriceUseCase";
 
 export type ProductViewModel = ProductData & { status: ProductStatus };
-type Message = {type: "error" | "success", text: string}
+type Message = { type: "error" | "success"; text: string };
 
 export function useProducts(
     getProductsUseCase: GetProductsUseCase,
     getProductByIdUseCase: GetProductByIdUseCase,
-    updateProductPriceUseCase: UpdateProductPriceUseCase,
-
+    updateProductPriceUseCase: UpdateProductPriceUseCase
 ) {
     const { currentUser } = useAppContext();
     const [reloadKey, reload] = useReload();
@@ -55,7 +57,10 @@ export function useProducts(
         async (id: number) => {
             if (id) {
                 if (!currentUser.isAdmin) {
-                    setMessage({type:"error", text:"Only admin users can edit the price of a product"});
+                    setMessage({
+                        type: "error",
+                        text: "Only admin users can edit the price of a product",
+                    });
                     return;
                 }
 
@@ -64,9 +69,9 @@ export function useProducts(
                     setEditingProduct(buildProductViewModel(product));
                 } catch (error) {
                     if (error instanceof ResourceNotFound) {
-                        setMessage({type:"error", text:error.message});
+                        setMessage({ type: "error", text: error.message });
                     } else {
-                        setMessage({type:"error", text:"Unexpected error has ocurred"});
+                        setMessage({ type: "error", text: "Unexpected error has ocurred" });
                     }
                 }
             }
@@ -75,34 +80,37 @@ export function useProducts(
     );
 
     async function saveEditPrice(): Promise<void> {
-
         if (editingProduct) {
-              
             try {
-                await updateProductPriceUseCase.execute(currentUser, editingProduct.id, editingProduct.price); 
-                setMessage({type:"success", text:`Price ${editingProduct.price} for '${editingProduct.title}' updated`});
+                await updateProductPriceUseCase.execute(
+                    currentUser,
+                    editingProduct.id,
+                    editingProduct.price
+                );
+                setMessage({
+                    type: "success",
+                    text: `Price ${editingProduct.price} for '${editingProduct.title}' updated`,
+                });
                 setEditingProduct(undefined);
                 reload();
             } catch (error) {
                 if (error instanceof ActionNotAllowedError) {
-                    setMessage({type:"error", text:error.message});
+                    setMessage({ type: "error", text: error.message });
                 } else {
-                    setMessage({type:"error", text:
-                        `An error has ocurred updating the price ${editingProduct.price} for '${editingProduct.title}'`
+                    setMessage({
+                        type: "error",
+                        text: `An error has ocurred updating the price ${editingProduct.price} for '${editingProduct.title}'`,
                     });
                     setEditingProduct(undefined);
                     reload();
                 }
-                
-
             }
         }
     }
 
-    const onCloseMessage = useCallback( () => {
+    const onCloseMessage = useCallback(() => {
         setMessage(undefined);
     }, []);
-    
 
     return {
         products,
@@ -115,7 +123,7 @@ export function useProducts(
         onChangePrice,
         priceError,
         saveEditPrice,
-        onCloseMessage
+        onCloseMessage,
     };
 }
 
@@ -125,4 +133,3 @@ function buildProductViewModel(product: Product): ProductViewModel {
         price: "" + product.price.value.toFixed(2),
     };
 }
-

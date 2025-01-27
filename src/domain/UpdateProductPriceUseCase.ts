@@ -2,13 +2,15 @@ import { StoreApi } from "../data/api/StoreApi";
 import { User } from "../presentation/context/AppContext";
 
 
+export class ActionNotAllowedError extends Error {};
+
 export class UpdateProductPriceUseCase {
     constructor(private storeApi: StoreApi) {}
 
     async execute(user: User, id: number, price:string): Promise<void> {
 
         if (!user.isAdmin) {
-            throw new Error("Only admin users can edit the price of a product");
+            throw new ActionNotAllowedError("Only admin users can edit the price of a product");
         }
 
         const remoteProduct = await this.storeApi.get(id);
