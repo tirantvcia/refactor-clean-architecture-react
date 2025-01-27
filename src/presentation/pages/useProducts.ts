@@ -6,7 +6,7 @@ import { useAppContext } from "../context/useAppContext";
 import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 import { ResourceNotFound } from "../../domain/ProductRepository";
 import { Price, ValidationError } from "../../domain/Price";
-import { StoreApi } from "../../data/api/StoreApi";
+import { ActionNotAllowedError, UpdateProductPriceUseCase } from "../../domain/UpdateProductPriceUseCase";
 
 export type ProductViewModel = ProductData & { status: ProductStatus };
 type Message = {type: "error" | "success", text: string}
@@ -14,7 +14,8 @@ type Message = {type: "error" | "success", text: string}
 export function useProducts(
     getProductsUseCase: GetProductsUseCase,
     getProductByIdUseCase: GetProductByIdUseCase,
-    storeApi: StoreApi
+    updateProductPriceUseCase: UpdateProductPriceUseCase,
+
 ) {
     const { currentUser } = useAppContext();
     const [reloadKey, reload] = useReload();
@@ -76,27 +77,24 @@ export function useProducts(
     async function saveEditPrice(): Promise<void> {
 
         if (editingProduct) {
-            const remoteProduct = await storeApi.get(editingProduct.id);
-    
-            if (!remoteProduct) return;
-    
-            const editedRemoteProduct = {
-                ...remoteProduct,
-                price: Number(editingProduct.price),
-            };
-    
+              
             try {
-                await storeApi.post(editedRemoteProduct);
-    
+                await updateProductPriceUseCase.execute(currentUser, editingProduct.id, editingProduct.price); 
                 setMessage({type:"success", text:`Price ${editingProduct.price} for '${editingProduct.title}' updated`});
                 setEditingProduct(undefined);
                 reload();
             } catch (error) {
-                setMessage({type:"error", text:
-                    `An error has ocurred updating the price ${editingProduct.price} for '${editingProduct.title}'`
-            });
-                setEditingProduct(undefined);
-                reload();
+                if (error instanceof ActionNotAllowedError) {
+                    setMessage({type:"error", text:error.message});
+                } else {
+                    setMessage({type:"error", text:
+                        `An error has ocurred updating the price ${editingProduct.price} for '${editingProduct.title}'`
+                    });
+                    setEditingProduct(undefined);
+                    reload();
+                }
+                
+
             }
         }
     }

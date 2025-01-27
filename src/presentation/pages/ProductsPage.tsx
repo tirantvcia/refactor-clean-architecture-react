@@ -30,10 +30,12 @@ export const ProductsPage: React.FC = () => {
         []
     );
 
-    const storeApi = useMemo(
-        () => CompositionRoot.getInstance().provideStoreApi(),
+   const updateProductPriceUseCase = useMemo(
+        () => CompositionRoot.getInstance().provideUpdateProductPriceUseCase(),
         []
     );
+
+    
 
     const {
         products,
@@ -45,7 +47,7 @@ export const ProductsPage: React.FC = () => {
         priceError,
         saveEditPrice,
         onCloseMessage
-    } = useProducts(getProductsUseCase, getProductByIdUseCase, storeApi);
+    } = useProducts(getProductsUseCase, getProductByIdUseCase, updateProductPriceUseCase);
 
     
 
