@@ -4,7 +4,7 @@ import { RemoteProduct, StoreApi } from "./StoreApi";
 
 export class ProductApiRepository implements ProductRepository {
     constructor(readonly storeApi: StoreApi) {}
-
+ 
     async getAll(): Promise<Product[]> {
         const remoteProducts = await this.storeApi.getAll();
         return remoteProducts.map(buildProduct);
@@ -18,6 +18,19 @@ export class ProductApiRepository implements ProductRepository {
             throw new ResourceNotFound(`Product with id ${id} not found`);
         }
     }
+
+    async save(product: Product): Promise<void> {
+        const remoteProduct = await this.storeApi.get(product.id);
+
+        if (!remoteProduct) return;
+
+        const editedRemoteProduct = {
+            ...remoteProduct,
+            price: Number(product.price.value),
+        };
+        return  this.storeApi.post(editedRemoteProduct);
+    }
+
 }
 
 export function buildProduct(remoteProduct: RemoteProduct): Product {

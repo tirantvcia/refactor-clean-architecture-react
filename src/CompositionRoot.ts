@@ -26,11 +26,8 @@ export class CompositionRoot {
         return new GetProductByIdUseCase(this.productRepository);
     }
 
-    provideStoreApi(): StoreApi {
-        return this.storeApi;
-    }
 
     provideUpdateProductPriceUseCase(): UpdateProductPriceUseCase {
-        return new UpdateProductPriceUseCase(this.storeApi);
+        return new UpdateProductPriceUseCase(this.productRepository);
     }
 }
