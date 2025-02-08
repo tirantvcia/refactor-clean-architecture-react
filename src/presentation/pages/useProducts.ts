@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useReload } from "../hooks/useReload";
 import { GetProductsUseCase } from "../../domain/GetProductsUseCase";
-import { Product, ProductData, ProductStatus } from "../../domain/Product";
+import { Product } from "../../domain/Product";
 import { useAppContext } from "../context/useAppContext";
 import { GetProductByIdUseCase } from "../../domain/GetProductByIdUseCase";
 import { ResourceNotFound } from "../../domain/ProductRepository";
@@ -10,9 +10,9 @@ import {
     ActionNotAllowedError,
     UpdateProductPriceUseCase,
 } from "../../domain/UpdateProductPriceUseCase";
+import { Message, ProductViewModel } from "./useProductsState";
 
-export type ProductViewModel = ProductData & { status: ProductStatus };
-type Message = { type: "error" | "success"; text: string };
+
 
 export function useProducts(
     getProductsUseCase: GetProductsUseCase,
@@ -37,7 +37,7 @@ export function useProducts(
         setEditingProduct(undefined);
     }, [setEditingProduct]);
 
-    function onChangePrice(price: string): void {
+    const onChangePrice = useCallback((price: string) => {
         if (!editingProduct) return;
 
         try {
@@ -51,7 +51,7 @@ export function useProducts(
                 setPriceError("Unexpected error has ocurred");
             }
         }
-    }
+    },[editingProduct])
 
     const updatingQuantity = useCallback(
         async (id: number) => {
@@ -79,7 +79,7 @@ export function useProducts(
         [currentUser.isAdmin, getProductByIdUseCase]
     );
 
-    async function saveEditPrice(): Promise<void> {
+    const saveEditPrice = useCallback(async () => {
         if (editingProduct) {
             try {
                 await updateProductPriceUseCase.execute(
@@ -106,7 +106,7 @@ export function useProducts(
                 }
             }
         }
-    }
+    },[currentUser, editingProduct, reload, updateProductPriceUseCase]);
 
     const onCloseMessage = useCallback(() => {
         setMessage(undefined);
@@ -114,10 +114,8 @@ export function useProducts(
 
     return {
         products,
-        reload,
         updatingQuantity,
         editingProduct,
-        setEditingProduct,
         message,
         cancelEditPrice,
         onChangePrice,
