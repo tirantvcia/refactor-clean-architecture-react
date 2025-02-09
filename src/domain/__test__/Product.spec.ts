@@ -33,7 +33,7 @@ describe("Product", () => {
         const editedProduct = product.editPrice("3.9");
         expect(editedProduct.status).toBe("active");
         expect(editedProduct.price.value).toBe(3.9);
-    }); 
+    });
     test("should edit product price and assign status inactive if prices is equal to 0", () => {
         const product = Product.create({
             id: 1,
@@ -44,5 +44,5 @@ describe("Product", () => {
         const editedProduct = product.editPrice("0.0");
         expect(editedProduct.status).toBe("inactive");
         expect(editedProduct.price.value).toBe(0);
-    });       
+    });
 });

@@ -26,7 +26,6 @@ export class CompositionRoot {
         return new GetProductByIdUseCase(this.productRepository);
     }
 
-
     provideUpdateProductPriceUseCase(): UpdateProductPriceUseCase {
         return new UpdateProductPriceUseCase(this.productRepository);
     }

@@ -12,8 +12,6 @@ import {
 } from "../../domain/UpdateProductPriceUseCase";
 import { Message, ProductViewModel } from "./useProductsState";
 
-
-
 export function useProducts(
     getProductsUseCase: GetProductsUseCase,
     getProductByIdUseCase: GetProductByIdUseCase,
@@ -37,21 +35,24 @@ export function useProducts(
         setEditingProduct(undefined);
     }, [setEditingProduct]);
 
-    const onChangePrice = useCallback((price: string) => {
-        if (!editingProduct) return;
+    const onChangePrice = useCallback(
+        (price: string) => {
+            if (!editingProduct) return;
 
-        try {
-            setEditingProduct({ ...editingProduct, price: price });
-            Price.create(price);
-            setPriceError(undefined);
-        } catch (error) {
-            if (error instanceof ValidationError) {
-                setPriceError(error.message);
-            } else {
-                setPriceError("Unexpected error has ocurred");
+            try {
+                setEditingProduct({ ...editingProduct, price: price });
+                Price.create(price);
+                setPriceError(undefined);
+            } catch (error) {
+                if (error instanceof ValidationError) {
+                    setPriceError(error.message);
+                } else {
+                    setPriceError("Unexpected error has ocurred");
+                }
             }
-        }
-    },[editingProduct])
+        },
+        [editingProduct]
+    );
 
     const updatingQuantity = useCallback(
         async (id: number) => {
@@ -106,7 +107,7 @@ export function useProducts(
                 }
             }
         }
-    },[currentUser, editingProduct, reload, updateProductPriceUseCase]);
+    }, [currentUser, editingProduct, reload, updateProductPriceUseCase]);
 
     const onCloseMessage = useCallback(() => {
         setMessage(undefined);

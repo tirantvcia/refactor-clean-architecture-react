@@ -4,7 +4,7 @@ import { RemoteProduct, StoreApi } from "./StoreApi";
 
 export class ProductApiRepository implements ProductRepository {
     constructor(readonly storeApi: StoreApi) {}
- 
+
     async getAll(): Promise<Product[]> {
         const remoteProducts = await this.storeApi.getAll();
         return remoteProducts.map(buildProduct);
@@ -28,9 +28,8 @@ export class ProductApiRepository implements ProductRepository {
             ...remoteProduct,
             price: Number(product.price.value),
         };
-        return  this.storeApi.post(editedRemoteProduct);
+        return this.storeApi.post(editedRemoteProduct);
     }
-
 }
 
 export function buildProduct(remoteProduct: RemoteProduct): Product {

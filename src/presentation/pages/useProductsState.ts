@@ -12,5 +12,5 @@ export type useProductState = {
     onChangePrice: (price: string) => void;
     priceError: string | undefined;
     saveEditPrice: () => Promise<void>;
-    onCloseMessage: () => void
-}
+    onCloseMessage: () => void;
+};
